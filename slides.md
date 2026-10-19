@@ -38,7 +38,7 @@ topics:
 
 ---
 layout: figure
-kicker: 01 · 問題從哪裡來
+kicker: 問題背景
 clicks: 1
 ---
 
@@ -63,7 +63,7 @@ clicks: 1
 
 ---
 layout: figure-side
-kicker: 01 · 問題從哪裡來
+kicker: 問題背景
 figureTag: 概念示意
 clicks: 1
 ---
@@ -91,7 +91,7 @@ clicks: 1
 
 ---
 layout: figure
-kicker: 01 · 問題從哪裡來
+kicker: 問題背景
 figureTag: 概念示意
 clicks: 1
 ---
@@ -124,7 +124,7 @@ clicks: 1
 
 ---
 layout: figure-side
-kicker: 02 · 其他電站為什麼能提供線索？
+kicker: 鄰近電站
 figureTag: 概念示意
 figureWidth: 52%
 clicks: 1
@@ -154,7 +154,7 @@ clicks: 1
 
 ---
 layout: figure
-kicker: 02 · 其他電站為什麼能提供線索？
+kicker: 鄰近電站
 figureTag: 概念示意
 clicks: 1
 ---
@@ -179,7 +179,7 @@ clicks: 1
 
 ---
 layout: figure-side
-kicker: 02 · 其他電站為什麼能提供線索？
+kicker: 鄰近電站
 figureTag: 概念示意
 clicks: 1
 ---
@@ -211,7 +211,7 @@ clicks: 1
 
 ---
 layout: figure-side
-kicker: 02 · 其他電站為什麼能提供線索？
+kicker: 鄰近電站
 figureTag: 示意分布，非實際站點位置
 clicks: 1
 ---
@@ -247,7 +247,7 @@ Simeunović et al.（2021），Abstract、§IV-A Datasets，[PDF pp.2、6](https
 
 ---
 layout: flow
-kicker: 03 · AI 如何把線索變成預測？
+kicker: 模型設計
 ---
 
 # 我們真正要學習的，是時間與空間的關係
@@ -288,7 +288,7 @@ AI 的工作不是直接「看見未來的雲」，而是從大量歷史資料�
 
 ---
 layout: figure
-kicker: 03 · AI 如何把線索變成預測？
+kicker: 模型設計
 clicks: 2
 ---
 
@@ -316,7 +316,7 @@ Simeunović et al.（2021），§III-A：連線以 k 近鄰（k-nearest neighbor
 
 ---
 layout: figure
-kicker: 03 · AI 如何把線索變成預測？
+kicker: 模型設計
 figureTag: 教學簡化圖
 clicks: 3
 ---
@@ -348,26 +348,31 @@ Simeunović et al.（2021），§III-A、Eq.(7)、Fig. 1，[PDF pp.4–5](https:
 
 ---
 layout: figure
-kicker: 04 · 模型有沒有用？
+kicker: 實驗結果
+figureTag: 概念示意
+clicks: 2
 ---
 
 # 不能拿已經學過的資料，證明自己預測得準
 
-訓練與測試分開：用 2016 年的資料學習，在 2017 年檢驗。
+用 2016 年學習，再拿模型沒看過的 2017 年出題考它。
 
 ::figure::
 
-<SplitTimeline />
+<SplitTimeline :stage="$clicks" />
 
 ::source::
 
 Simeunović et al.（2021），§IV-A、§IV-D、§IV-E，[PDF pp.6–7](https://arxiv.org/pdf/2107.13875#page=6)。
 
 <!--
-【P12｜0:55】
+【P12｜1:00】
 要證明模型有用，不能拿它已經學過的資料來考它。
 GCLSTM 用 2016 年的資料訓練，再用 2017 年、模型沒看過的一整年資料測試。
-資料是 304 座電站、每 15 分鐘一筆；預測範圍從 15 分鐘到 6 小時後；夜間不計入誤差。
+[click] 放大 2017 年的某一天。站在「現在」這個時間點，模型只看得到過去的出力，要預測接下來 6 小時、每 15 分鐘一步、共 24 步的出力。
+[click] 接著揭曉實際出力，把每一步的預測和實際相比，紅線就是誤差。太陽下山後出力本來就是 0，夜間不計入誤差。
+把「現在」在 2017 年每 15 分鐘往後移一次，304 座電站各考一遍，這些誤差彙整起來，就是下一頁的 NRMSE。
+（右側曲線為概念示意，非真實電站資料。）
 
 比較基準 STAR 採用不同的方式：用最近兩個月的資料擬合，每兩週滾動重新估計一次。
 台上不需要展開，但要記得：不能說所有模型都用完全相同的方式訓練。
@@ -378,7 +383,7 @@ GCLSTM 用 2016 年的資料訓練，再用 2017 年、模型沒看過的一整�
 
 ---
 layout: figure-side
-kicker: 04 · 模型有沒有用？
+kicker: 實驗結果
 figureWidth: 50%
 clicks: 1
 ---
@@ -414,7 +419,7 @@ NRMSE 是誤差，不能用 100% 減去它換算成「準確率」。
 
 ---
 layout: figure-side
-kicker: 04 · 模型有沒有用？
+kicker: 實驗結果
 figureWidth: 50%
 figureTag: 概念示意
 ---
@@ -449,7 +454,7 @@ Simeunović et al.（2021），§IV-F、Fig. 7(b)、Table II，[PDF pp.9–10](h
 
 ---
 layout: flow
-kicker: 05 · 回到真實世界
+kicker: 實際應用
 clicks: 1
 ---
 
