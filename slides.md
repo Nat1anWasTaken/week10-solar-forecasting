@@ -7,8 +7,8 @@ canvasWidth: 980
 duration: 15min
 timer: countdown
 layout: cover
-kicker: AI × 太陽能預測
-meta: 第 X 組 · 組員姓名 · 2026
+team: 第二組
+members: [董兆陽, 廖翊安, 陳宥蓉]
 topics:
   - label: 本站歷史
     color: blue
