@@ -13,6 +13,8 @@ const props = defineProps<{
   background?: string
   kicker?: string
   meta?: string
+  team?: string
+  members?: string[]
   topics?: Topic[]
 }>()
 
@@ -30,6 +32,10 @@ const style = computed(() => handleBackground(props.background, true))
         <span v-for="topic in props.topics" :key="topic.label" class="google-topic">
           <i :class="topic.color || 'blue'" />{{ topic.label }}
         </span>
+      </div>
+      <div v-if="props.team || props.members?.length" class="google-byline" :class="{ light: Boolean(props.background) }">
+        <span v-if="props.team" class="google-byline-team">{{ props.team }}</span>
+        <span v-for="name in props.members" :key="name" class="google-byline-member">{{ name }}</span>
       </div>
       <div v-if="props.meta" class="google-meta" :class="{ light: Boolean(props.background) }">
         {{ props.meta }}

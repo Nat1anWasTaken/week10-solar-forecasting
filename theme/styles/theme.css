@@ -484,6 +484,31 @@ body,
   color: rgba(255, 255, 255, 0.75);
 }
 
+.google-byline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1.6rem;
+  margin-top: 2.2rem;
+  color: var(--google-muted);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.google-byline-team {
+  padding-right: 1.6rem;
+  border-right: 1px solid var(--google-border);
+  color: var(--google-ink);
+  font-weight: 700;
+}
+
+.google-byline.light,
+.google-byline.light .google-byline-team {
+  color: rgba(255, 255, 255, 0.82);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
 .google-topics {
   display: flex;
   flex-wrap: wrap;
