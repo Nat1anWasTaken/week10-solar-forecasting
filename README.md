@@ -47,6 +47,15 @@ configured through frontmatter props and named slots.
 | `two-cols-callout` | `calloutKicker` | `left`, `right` |
 | `image-left`, `image-right` | `image`, `backgroundSize`, `kicker` | `callout` |
 | `code-palette` | `palette` | — |
+| `figure` | `kicker`, `figureTag` | `figure`, `source` |
+| `figure-side` | `kicker`, `figureTag`, `figureWidth` | `figure`, `source` |
+| `flow` | `kicker`, `figureTag`, `stepColors`, `stepNumbers` | `step1`, `step2`, `step3`, `figure`, `after`, `source` |
+
+The figure layouts put a title block above (`figure`) or beside
+(`figure-side`) one illustration. `figureTag` adds a small label such as
+`概念示意`, and the `source` slot renders a small citation line at the bottom.
+`flow` shows three connected steps; adding a `figure` slot turns the steps
+into a compact row above the figure.
 
 For example, three cards require no HTML or utility classes:
 
