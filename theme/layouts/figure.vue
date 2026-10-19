@@ -1,7 +1,6 @@
 <script setup lang="ts">
 defineProps<{
   kicker?: string
-  figureTag?: string
 }>()
 </script>
 
@@ -14,7 +13,6 @@ defineProps<{
       <slot />
     </div>
     <div class="google-figure">
-      <span v-if="figureTag" class="google-figure-tag">{{ figureTag }}</span>
       <slot name="figure" />
     </div>
     <div v-if="$slots.source" class="google-source">

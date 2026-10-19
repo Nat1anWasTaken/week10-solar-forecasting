@@ -1,7 +1,6 @@
 <script setup lang="ts">
 const props = withDefaults(defineProps<{
   kicker?: string
-  figureTag?: string
   figureWidth?: string
 }>(), {
   figureWidth: '56%',
@@ -17,7 +16,6 @@ const props = withDefaults(defineProps<{
       <slot />
     </div>
     <div class="google-figure">
-      <span v-if="props.figureTag" class="google-figure-tag">{{ props.figureTag }}</span>
       <slot name="figure" />
     </div>
     <div v-if="$slots.source" class="google-source">

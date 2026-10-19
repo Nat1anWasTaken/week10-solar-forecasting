@@ -100,8 +100,8 @@ public/images/   靜態圖片
 | `two-cols-callout` | `calloutKicker` | `left`, `right` |
 | `image-left`, `image-right` | `image`, `backgroundSize`, `kicker` | `callout` |
 | `code-palette` | `palette` | — |
-| `figure` | `kicker`, `figureTag` | `figure`, `source` |
-| `figure-side` | `kicker`, `figureTag`, `figureWidth` | `figure`, `source` |
-| `flow` | `kicker`, `figureTag`, `stepColors`, `stepNumbers` | `step1`, `step2`, `step3`, `figure`, `after`, `source` |
+| `figure` | `kicker` | `figure`, `source` |
+| `figure-side` | `kicker`, `figureWidth` | `figure`, `source` |
+| `flow` | `kicker`, `stepColors`, `stepNumbers` | `step1`, `step2`, `step3`, `figure`, `after`, `source` |
 
 頁面樣式可使用 CSS 變數 `--google-blue`、`--google-red`、`--google-yellow`、`--google-green`、`--google-ink`、`--google-muted`、`--google-surface`、`--google-border`、`--google-shadow`。Google Sans 字型為本地託管，來源說明見 [`theme/assets/fonts/SOURCE.md`](theme/assets/fonts/SOURCE.md)。

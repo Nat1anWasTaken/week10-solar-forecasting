@@ -3,7 +3,6 @@ type Accent = 'blue' | 'red' | 'yellow' | 'green'
 
 const props = withDefaults(defineProps<{
   kicker?: string
-  figureTag?: string
   stepColors?: Accent[]
   stepNumbers?: string[]
 }>(), {
@@ -36,7 +35,6 @@ const steps = ['step1', 'step2', 'step3'] as const
       </template>
     </div>
     <div v-if="$slots.figure" class="google-figure">
-      <span v-if="props.figureTag" class="google-figure-tag">{{ props.figureTag }}</span>
       <slot name="figure" />
     </div>
     <div v-if="$slots.after" class="google-flow-after">

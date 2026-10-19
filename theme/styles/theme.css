@@ -730,21 +730,6 @@ body,
   text-align: center;
 }
 
-.google-figure-tag {
-  position: absolute;
-  z-index: 1;
-  top: 0.15rem;
-  right: 0;
-  padding: 0.1rem 0.65rem;
-  border: 1px solid var(--google-border);
-  border-radius: 99px;
-  background: white;
-  color: var(--google-muted);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-}
-
 .google-source {
   margin-top: 0.5rem;
   padding-right: 4.5rem;
@@ -766,11 +751,6 @@ body,
 
 .slidev-layout.figure-side .google-figure {
   gap: 0.5rem;
-}
-
-.slidev-layout.figure-side .google-figure-tag {
-  position: static;
-  align-self: flex-end;
 }
 
 .google-source p {
