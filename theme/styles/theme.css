@@ -13,6 +13,8 @@
   --google-red: #ea4335;
   --google-yellow: #fbbc04;
   --google-green: #34a853;
+  --google-green-dark: #1e8e3e;
+  --google-gray: #9aa0a6;
   --google-ink: #202124;
   --google-muted: #5f6368;
   --google-surface: #f8f9fa;
@@ -648,6 +650,215 @@ body,
 
 .google-image-callout h3 {
   color: var(--google-blue);
+}
+
+.slidev-layout.figure,
+.slidev-layout.flow {
+  display: flex;
+  flex-direction: column;
+  padding: 2.5rem 4rem 1.5rem;
+}
+
+.slidev-layout.figure-side {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--google-figure-width, 56%);
+  grid-template-rows: minmax(0, 1fr) auto;
+  column-gap: 2.2rem;
+  padding: 2.5rem 3.2rem 1.5rem 4rem;
+}
+
+.slidev-layout.figure .google-kicker + h1,
+.slidev-layout.figure-side .google-kicker + h1,
+.slidev-layout.flow .google-kicker + h1 {
+  margin-top: 0.35rem;
+}
+
+.slidev-layout.figure h1,
+.slidev-layout.figure-side h1,
+.slidev-layout.flow h1 {
+  margin-bottom: 0.45rem;
+  font-size: 34px;
+}
+
+.slidev-layout.figure h1 + p,
+.slidev-layout.flow h1 + p {
+  max-width: none;
+  margin: 0;
+  font-size: 20px;
+}
+
+.google-figure-text {
+  align-self: center;
+}
+
+.google-figure-text p,
+.google-figure-text li {
+  font-size: 19px;
+  line-height: 1.5;
+}
+
+.google-figure-text ul {
+  margin: 0.8rem 0;
+}
+
+.google-figure-text blockquote {
+  margin: 1rem 0 0;
+  padding: 0.15rem 0 0.15rem 1rem;
+  font-size: 17px;
+}
+
+.google-figure-text blockquote p {
+  margin: 0.3rem 0;
+  font-size: 17px;
+}
+
+.google-figure {
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.google-figure > p {
+  max-width: none;
+  margin: 0.55rem 0 0;
+  color: var(--google-muted);
+  font-size: 15px;
+  text-align: center;
+}
+
+.google-figure-tag {
+  position: absolute;
+  z-index: 1;
+  top: 0.15rem;
+  right: 0;
+  padding: 0.1rem 0.65rem;
+  border: 1px solid var(--google-border);
+  border-radius: 99px;
+  background: white;
+  color: var(--google-muted);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.google-source {
+  margin-top: 0.5rem;
+  padding-right: 4.5rem;
+  color: var(--google-muted);
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+
+.slidev-layout.figure-side .google-source {
+  grid-column: 1 / -1;
+}
+
+.slidev-layout.figure-side h1 + p {
+  max-width: none;
+  margin: 0;
+  color: var(--google-muted);
+  font-size: 19px;
+}
+
+.slidev-layout.figure-side .google-figure {
+  gap: 0.5rem;
+}
+
+.slidev-layout.figure-side .google-figure-tag {
+  position: static;
+  align-self: flex-end;
+}
+
+.google-source p {
+  margin: 0;
+}
+
+.google-flow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 2.4rem minmax(0, 1fr) 2.4rem minmax(0, 1fr);
+  margin-top: 1.5rem;
+}
+
+.google-flow-step {
+  padding: 1.2rem 1.25rem;
+  border: 1px solid var(--google-border);
+  border-radius: 1rem;
+  background: white;
+  box-shadow: var(--google-shadow);
+}
+
+.google-flow-step h3 {
+  margin-bottom: 0.3rem;
+  font-size: 23px;
+}
+
+.google-flow-step p {
+  margin: 0.35rem 0;
+  color: var(--google-muted);
+  font-size: 17px;
+  line-height: 1.45;
+}
+
+.google-flow-arrow {
+  position: relative;
+  align-self: center;
+  justify-self: center;
+  width: 1.5rem;
+  height: 3px;
+  border-radius: 99px;
+  background: var(--google-gray);
+}
+
+.google-flow-arrow::after {
+  position: absolute;
+  top: -5px;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  border-top: 3px solid var(--google-gray);
+  border-right: 3px solid var(--google-gray);
+  content: '';
+  transform: rotate(45deg);
+}
+
+.slidev-layout.flow.has-figure .google-flow {
+  margin-top: 0.9rem;
+}
+
+.slidev-layout.flow.has-figure .google-flow-step {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.7rem 1rem;
+  box-shadow: 0 4px 18px rgba(60, 64, 67, 0.08);
+}
+
+.slidev-layout.flow.has-figure .google-card-icon {
+  flex: none;
+  margin-bottom: 0;
+}
+
+.slidev-layout.flow.has-figure .google-flow-step h3 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.slidev-layout.flow.has-figure .google-flow-step p {
+  margin: 0;
+  font-size: 15px;
+}
+
+.google-flow-after {
+  margin-top: 1rem;
+}
+
+.google-flow-after p {
+  margin: 0;
+  font-size: 20px;
 }
 
 @media print {
