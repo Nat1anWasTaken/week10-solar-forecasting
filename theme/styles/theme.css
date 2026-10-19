@@ -24,6 +24,8 @@
   --slidev-code-background: #f7f8fa;
   --slidev-code-foreground: var(--google-ink);
   --slidev-code-font-family: 'Roboto Mono', SFMono-Regular, Consolas, monospace;
+  /* Shared slide frame: every layout uses the same outer padding */
+  --google-slide-padding: 2.5rem 4rem 1.5rem;
 }
 
 html,
@@ -37,7 +39,7 @@ body,
 .slidev-layout {
   position: relative;
   overflow: hidden;
-  padding: 3.4rem 4.25rem;
+  padding: var(--google-slide-padding);
   background: white;
   color: var(--google-ink);
   font-family: 'Google Sans', 'Product Sans', Arial, sans-serif;
@@ -192,14 +194,6 @@ body,
   box-shadow: 0 3px 12px rgba(60, 64, 67, 0.08);
 }
 
-.slidev-layout.default,
-.slidev-layout.two-cols,
-.slidev-layout.two-cols-header,
-.slidev-layout.image-left,
-.slidev-layout.image-right {
-  padding-top: 3.25rem;
-}
-
 .slidev-layout.center {
   text-align: center;
 }
@@ -272,7 +266,6 @@ body,
 
 .slidev-layout.cover {
   isolation: isolate;
-  padding: 4.6rem 5rem;
 }
 
 .slidev-layout.cover::before {
@@ -656,7 +649,6 @@ body,
 .slidev-layout.flow {
   display: flex;
   flex-direction: column;
-  padding: 2.5rem 4rem 1.5rem;
 }
 
 .slidev-layout.figure-side {
@@ -664,7 +656,6 @@ body,
   grid-template-columns: minmax(0, 1fr) var(--google-figure-width, 56%);
   grid-template-rows: minmax(0, 1fr) auto;
   column-gap: 2.2rem;
-  padding: 2.5rem 3.2rem 1.5rem 4rem;
 }
 
 .slidev-layout.figure .google-kicker + h1,
