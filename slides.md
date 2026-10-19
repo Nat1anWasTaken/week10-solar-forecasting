@@ -15,71 +15,192 @@ topics:
   - label: Finish
     color: green
 ---
+# 用多場址資料預測太陽能出力
 
-# Untitled Deck
+**核心問題：如何利用不同電站的歷史紀錄，預測接下來幾小時的太陽能出力？**
 
-A short subtitle for this presentation
+- 預測對象：各電站未來的發電功率。
+- 研究案例：GCLSTM，以神經網路學習多個站點的時空關係。
+- 預測範圍：未來 **6 小時**，每 **15 分鐘**一個預測值。
 
----
-layout: section
-kicker: PART 01
----
+Reference：[Simeunović et al.（2021），§II-B、§III-A，PDF pp.4–5](https://arxiv.org/pdf/2107.13875#page=4)；[§IV-F，Fig.4，PDF pp.7–8](https://arxiv.org/pdf/2107.13875#page=7)。
 
-# Getting started
+<!--
+大致講法：
+這份報告聚焦在一個可檢驗的任務：用目前已取得的資料，估計各電站接下來的出力。
+這裡研究的 AI 是從資料中學習的預測模型。我們會說明資料為什麼可能有用、模型怎麼使用它，以及實驗結果支持到什麼程度。
 
----
-layout: three-cards
----
+呈現建議：
+可用「已觀測時段」與「未來預測時段」說明任務，未來部分標出 6 小時、24 個時間步。若使用自行繪製的曲線，請標為「概念示意」。
 
-# Three ideas
-
-::card1::
-
-## Focus
-
-Keep one clear message per slide.
-
-::card2::
-
-## Rhythm
-
-Alternate dense and spacious layouts.
-
-::card3::
-
-## Finish
-
-Close with a memorable takeaway.
+全份共同要求：
+每頁最後的 Reference 都是對外顯示的頁尾文字，請以較小但可讀的字級放在 footer，保留可點擊連結、章節與頁碼。
+HTML 註解中的講法與呈現建議供交接使用，不放進觀眾看到的正文。
+報告以第 3、5 頁為講解重點，六張內容頁約 12–13 分鐘，保留現場說明的彈性。
+-->
 
 ---
-layout: two-cols-callout
-calloutKicker: KEY POINT
----
 
-# Two columns
+# 鄰近電站為什麼可能提供預測線索
 
-::left::
+- 氣象變化可能先後影響不同電站，使各站出力存在有時間差的關聯。
+- 本站歷史提供時間資訊，其他站點的紀錄補充空間資訊。
+- **多場址預測（Multi-site Forecasting）**結合這些紀錄，學習跨站的時空關係。
 
-Put the main explanation on the left.
+Reference：[Simeunović et al.（2021），§I、§II-B，PDF pp.2、4](https://arxiv.org/pdf/2107.13875#page=2)；[Verdone et al.（2025），§2.2.2，PDF p.5](https://iris.uniroma1.it/retrieve/e7979c06-658a-46ff-8752-2ee679e4f960/Verdone_Review_2025.pdf#page=5)。
 
-- Supporting detail
-- Another detail
+<!--
+大致講法：
+可以想像一片雲依序經過 A、B 兩座電站。當 A 的出力先下降，這段紀錄可能成為預測 B 的線索。
+這只是用來解釋跨站資訊的情境。A 下降並不保證 B 一定跟著下降，也不能只憑兩條相似曲線就認定因果關係。
 
-::right::
+我們要檢查的是：模型能否從多站紀錄中學到有助於預測的關係。接下來會先看模型如何表示這些資料，再看它的預測誤差。
 
-Use the right side for a highlighted takeaway.
-
----
-layout: statement
-kicker: TAKEAWAY
----
-
-# One sentence worth remembering.
+呈現建議：
+可用兩至三座站點的出力變化，示意「相似變化發生在不同時間」。
+示意資料須明確標註。站點之間的連結表示資料關係，不表示輸電線路。
+-->
 
 ---
-layout: end
-kicker: THANK YOU
-meta: Questions?
+
+# GCLSTM 如何使用這些資料
+
+GCLSTM：Graph-Convolutional Long Short-Term Memory
+
+## 模型輸入
+
+- 各站歷史發電功率與多日功率的移動平均。
+- 依位置、時間與晴空模型計算的**晴空輻照度（Clear-sky Irradiance）**。
+
+## 模型機制
+
+- 每座電站對應圖上的一個節點。
+- **圖卷積（Graph Convolution）**在 **LSTM** 單元內整合鄰站資訊，同時處理時間變化。
+- 以實測功率作為訓練目標，學習輸出未來的功率序列。
+
+Reference：[Simeunović et al.（2021），§II-B、§III-A，Eq.(6)–(7)、Fig.1，PDF pp.4–5](https://arxiv.org/pdf/2107.13875#page=4)。
+
+<!--
+大致講法：
+圖卷積讓不同節點的資訊進入同一個預測過程，LSTM 則保留隨時間更新的狀態。兩者結合，讓模型利用跨站與跨時間的關係。
+
+晴空輻照度提供晴空條件下的參考值，可以事先計算。本案例的 GCLSTM 不輸入數值天氣預報（NWP），但也不能因此把它說成只看發電功率。
+
+雲的移動是前一頁說明跨站資訊的物理動機。這個模型直接預測功率，沒有另外輸出雲的位置或速度。
+
+呈現建議：
+可呈現「各站輸入資料」「含圖卷積的 LSTM 單元」「未來功率」的關係。
+若參考原文 Fig.1，保留編碼器與解碼器的意義。圖卷積位於 LSTM 單元內，避免畫成兩個先後獨立運作的模型。
+多日功率摘要應保留，避免讓人誤以為模型只需要最近幾小時的資料。
+-->
+
 ---
 
-# Thanks
+# 研究如何驗證預測能力
+
+- 資料：瑞士 **304 個真實太陽能站點**。
+- GCLSTM 訓練期間：**2016 年**。
+- 測試期間：**2017 年**，夜間不納入誤差計算。
+- 指標：**正規化均方根誤差（NRMSE）**，數值越低越好。
+
+本文的 NRMSE 以各站的 **RMSE ÷ 該站在 2017 年的最大實測功率**計算，以下用百分比表示。
+
+Reference：[Simeunović et al.（2021），§IV-A、§IV-D/E，PDF pp.6–7](https://arxiv.org/pdf/2107.13875#page=6)。
+
+<!--
+大致講法：
+把後續一年的資料用於測試，可以檢查模型在未用來訓練的時段如何表現；它仍然是在同一批站點上的測試，不能直接視為新站點或台灣場景的驗證。
+
+各站規模不同，所以這裡先用每站自己的峰值作為尺度。NRMSE 是誤差指標，不能用 100% 減去它，換算成「預測準確率」。
+
+呈現建議：
+可凸顯訓練與測試的時間分界，以及 NRMSE 的分母。
+訓練期間的敘述限定於 GCLSTM；下一頁的 STAR 採不同訓練方式。
+-->
+
+---
+
+# 改善幅度取決於預測時距
+
+原文 Table I：真實資料集的 **NRMSE（%），越低越好**。
+
+| 預測時距 | STAR：多場址自迴歸基準 | GCLSTM |
+| --- | ---: | ---: |
+| 15 分鐘 | 7.32% | 7.36% |
+| 1 小時 | 10.40% | 9.93% |
+| 3 小時 | 14.20% | 12.40% |
+| 6 小時 | 17.33% | 15.53% |
+
+- 在表列的 **1、3、6 小時**，GCLSTM 的誤差較低；**15 分鐘**則是 STAR 略低。
+- **本組解讀：**兩者都使用多站資料，這個比較無法單獨量出「加入鄰站資料」的效果。
+
+Reference：[Simeunović et al.（2021），Table I，Real dataset，PDF p.8](https://arxiv.org/pdf/2107.13875#page=8)；[§IV-B/D，基準與訓練設定，PDF pp.6–7](https://arxiv.org/pdf/2107.13875#page=6)。
+
+<!--
+大致講法：
+這組數字支持的判斷是：在這份資料與表列時距下，GCLSTM 多數情況的誤差較低，但沒有每個時距都勝過 STAR。
+15 分鐘的差距很小，這張表也沒有提供顯著性檢定，所以我們只描述表列數值的高低。
+
+這是兩套方法的整體比較。STAR 本身已經使用多站資料，而且採兩個月的滾動訓練視窗，每兩週重新估計一次。
+如果要單獨確認鄰站資料或圖卷積帶來多少增益，就需要控制其他條件，再比較移除該項目後的結果。
+
+呈現建議：
+可保留表格，或依這四個時距呈現比較。請保留 15 分鐘結果、完整數值與 NRMSE 單位。
+若轉成圖表，只使用表列資料，不自行補出中間時距的數值。
+數據標為「Table I 列報結果」；原表未明示跨站彙整方式，勿自行標為「304 站算術平均」。
+-->
+
+---
+
+# 預測結果如何進入供電安排
+
+- 台電 **2022 年的公開說明**指出，風力與太陽光電預測會提供調度、運轉單位使用。
+- 文中的具體例子：預估風力發電下降時，可提前讓火力機組準備。
+- 官方資料也強調，近期觀測對掌握天氣變化與校正預測的重要性。
+
+**本組判斷：GCLSTM 的預測結果若要用於台灣調度，仍需以本地資料與實際決策評估其效益。**
+
+Reference：《台電月刊》No.720（2022.12），〈借風引光 用心駕馭臺灣再生能源〉，[p.21](https://service.taipower.com.tw/tpcjournal/TPMM/2022/720/files/basic-html/page23.html)、[p.22](https://service.taipower.com.tw/tpcjournal/TPMM/2022/720/files/basic-html/page24.html)；[Simeunović et al.（2021），§IV，PDF pp.6–9](https://arxiv.org/pdf/2107.13875#page=6)。
+
+<!--
+大致講法：
+台電的例子說明預測為什麼要提前提供：其他機組需要準備時間。對我們研究的太陽能模型，也應追問它的預測能否在決策前到位，以及誤差會怎麼影響安排。
+
+目前的證據分成兩部分：瑞士論文提供預測誤差的實驗結果，台電資料說明再生能源預測的調度用途。它們沒有共同證明台電已採用這個 GCLSTM。
+
+因此，我們對應用的結論是：這個方法值得作為候選模型評估；是否適用，還要看本地預測表現與調度效益，不能只從誤差表推算節省成本或減少停電。
+
+呈現建議：
+可呈現「預測資訊交給調度人員」的用途關係，並保留研究評估與實際應用之間的界線。
+台電的火力準備例子請明確標為風力情境；若改用太陽能情境示意，須標為本組延伸說明。
+本頁直接收束報告，不再增加重述前面內容的總結頁。
+-->
+
+---
+
+# 參考資料
+
+1. **Simeunović, J., Schubnel, B., Alet, P.-J., & Carrillo, R. E.（2021）**  
+   *Spatio-temporal graph neural networks for multi-site PV power forecasting.*  
+   arXiv:2107.13875，作者公開稿 v2。  
+   模型與輸入：§III-A；實驗設定與結果：§IV，尤其 Table I。
+
+2. **Verdone, A., Panella, M., De Santis, E., & Rizzi, A.（2025）**  
+   *A review of solar and wind energy forecasting: From single-site to multi-site paradigm.*  
+   *Applied Energy, 392*, 126016。  
+   多場址預測的定義與資料表示：§2.2.2。
+
+3. **《台電月刊》第 720 期（2022 年 12 月）**  
+   〈借風引光 用心駕馭臺灣再生能源〉。  
+   本報告引用紙本 pp.21–22 的預測用途與近期觀測說明。
+
+Reference：[1：作者公開稿](https://arxiv.org/pdf/2107.13875)；[2：期刊原文](https://iris.uniroma1.it/retrieve/e7979c06-658a-46ff-8752-2ee679e4f960/Verdone_Review_2025.pdf)；[3：台電官方刊物 p.21](https://service.taipower.com.tw/tpcjournal/TPMM/2022/720/files/basic-html/page23.html)、[p.22](https://service.taipower.com.tw/tpcjournal/TPMM/2022/720/files/basic-html/page24.html)。
+
+<!--
+大致講法：
+此頁供查核，不逐項朗讀。
+
+呈現建議：
+保留完整書目與頁尾來源連結，便於聽眾回查。
+論文頁碼依本檔連結的作者公開稿 PDF 計數；台電頁碼依紙本標示，與電子翻頁序號不同。
+-->
