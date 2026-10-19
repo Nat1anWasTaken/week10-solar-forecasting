@@ -9,12 +9,12 @@ const props = withDefaults(defineProps<{
 })
 
 const W = 900
-const H = 330
+const H = 346
 const half = W / 2
 
 // Year strip; the highlighted slice is one day in 2017 that the panel below zooms into.
 const strip = { top: 0, height: 46 }
-const sliceX = half + 3 + (half - 3) * (135 / 365)
+const sliceX = half + 3 + (half - 3) * (300 / 365)
 
 // Zoomed panel: one test day, forecast issued at NOW for the next 6 hours.
 const NOW = 13
@@ -26,8 +26,9 @@ const panel = { top: 112, bottom: 282, left: 20, right: W - 20 }
 const x = scale(T0, T1, panel.left, panel.right)
 const y = scale(0, 1.08, panel.bottom, panel.top + 20)
 
-const actual = (t: number) => profiles.b(t) * cloud(t, 15.3, 0.4, 0.45)
-const base = (t: number) => 0.92 * clearSky(t) * cloud(t, 15.7, 0.7, 0.22)
+// The model expects a mild afternoon; a passing cloud makes the actual output dip harder.
+const actual = (t: number) => profiles.b(t) * cloud(t, 15.2, 0.45, 0.6)
+const base = (t: number) => 0.9 * clearSky(t) * cloud(t, 15.8, 0.9, 0.15)
 const forecast = (t: number) => Math.max(0, base(t) + (actual(NOW) - base(NOW)) * Math.exp(-2 * (t - NOW)))
 
 const past = linePath(sample(actual, T0, NOW), x, y)
@@ -61,7 +62,7 @@ const ticks = [6, 9, 12, 15, 18]
         :d="`M${sliceX - 4},${strip.height + 4} L${panel.left},${panel.top - 8} M${sliceX + 4},${strip.height + 4} L${panel.right},${panel.top - 8}`"
         class="zoom"
       />
-      <text :x="sliceX + 12" :y="strip.height + 24" class="muted">2017 年的某一天</text>
+      <text :x="sliceX - 6" :y="strip.height + 32" class="muted end">放大 2017 年的某一天</text>
     </g>
 
     <!-- Zoomed panel -->
@@ -88,7 +89,7 @@ const ticks = [6, 9, 12, 15, 18]
 
       <path :d="past" class="actual" />
       <path :d="predicted" class="forecast" />
-      <text :x="x(16.4) + 6" :y="y(forecast(16.4)) - 12" class="label blue">模型預測</text>
+      <text :x="x(14.2)" :y="y(forecast(14.2)) - 10" class="label blue">模型預測</text>
 
       <line :x1="x(NOW)" :x2="x(NOW)" :y1="panel.top - 6" :y2="panel.bottom" class="now" />
       <text :x="x(NOW) - 8" :y="panel.top + 4" class="now-label">現在</text>
@@ -106,11 +107,11 @@ const ticks = [6, 9, 12, 15, 18]
         class="error"
       />
       <path :d="future" class="answer" />
-      <text :x="x(15.3) + 4" :y="y(actual(15.3)) + 22" class="label green">實際出力（答案）</text>
-      <text :x="x(12.2)" :y="y(0.2)" class="label red end">紅線＝每一步的誤差</text>
-      <text :x="(x(NIGHT) + x(T1)) / 2" :y="panel.bottom - 12" class="muted center small">夜間</text>
-      <text :x="(x(NIGHT) + x(T1)) / 2" :y="panel.bottom - 30" class="muted center small">不計分</text>
-      <text x="0" :y="H - 2" class="footer">
+      <text :x="x(15.2)" :y="y(actual(15.2)) + 26" class="label green center">實際出力（答案）</text>
+      <text :x="x(16.2) + 10" :y="y(forecast(16.2)) - 14" class="label red">紅線＝每一步的誤差</text>
+      <text :x="(x(NIGHT) + x(T1)) / 2" :y="panel.bottom - 30" class="muted center small">夜間</text>
+      <text :x="(x(NIGHT) + x(T1)) / 2" :y="panel.bottom - 12" class="muted center small">不計分</text>
+      <text x="0" :y="H - 4" class="footer">
         「現在」在 2017 年每 15 分鐘往後移一次、304 座電站各考一遍，誤差彙整起來就是下一頁的 NRMSE。
       </text>
     </g>
@@ -252,13 +253,13 @@ const ticks = [6, 9, 12, 15, 18]
   fill: var(--google-red);
 }
 
-.label.end {
-  text-anchor: end;
-}
-
 .muted {
   fill: var(--google-muted);
   font-size: 14px;
+}
+
+.end {
+  text-anchor: end;
 }
 
 .center {
